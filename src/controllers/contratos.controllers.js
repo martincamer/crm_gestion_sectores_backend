@@ -220,3 +220,99 @@ export const actualizarDatosContrato = async (req, res, next) => {
     return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
+
+export const actualizarDatosContratoConPlatea = async (req, res, next) => {
+  const { id } = req.params; // Suponiendo que recibimos el ID del contrato a actualizar
+  const { datos } = req.body;
+  const { sector, username } = req;
+
+  try {
+    // Validar que `datos` esté presente y sea un objeto válido
+    if (!datos || typeof datos !== "object") {
+      return res
+        .status(400)
+        .json({ error: "Los datos proporcionados no son válidos." });
+    }
+
+    const estado = "en sección con platea";
+
+    // Actualizar solo el campo `datos` del contrato específico
+    const updateResult = await pool.query(
+      "UPDATE contratos SET datos = $1 WHERE id = $2 RETURNING *",
+      [JSON.stringify(datos), id]
+    );
+
+    const result = await pool.query(
+      "UPDATE contratos SET estado = $1 WHERE id = $2 RETURNING *",
+      [estado, id]
+    );
+
+    // Verificar si se encontró y actualizó el contrato
+    if (updateResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "El contrato especificado no existe." });
+    }
+
+    const todosLosContratos = await pool.query(
+      "SELECT * FROM contratos WHERE sector = $1 AND usuario = $2",
+      [sector, username]
+    );
+
+    res.status(200).json({
+      contratoActualizado: updateResult.rows[0],
+      todosLosContratos: todosLosContratos.rows,
+    });
+  } catch (error) {
+    console.error("Error al actualizar datos del contrato:", error);
+    return res.status(500).json({ error: "Error interno del servidor." });
+  }
+};
+
+export const actualizarDatosContratoSinPlatea = async (req, res, next) => {
+  const { id } = req.params; // Suponiendo que recibimos el ID del contrato a actualizar
+  const { datos } = req.body;
+  const { sector, username } = req;
+
+  try {
+    // Validar que `datos` esté presente y sea un objeto válido
+    if (!datos || typeof datos !== "object") {
+      return res
+        .status(400)
+        .json({ error: "Los datos proporcionados no son válidos." });
+    }
+
+    const estado = "en sección sin platea";
+
+    // Actualizar solo el campo `datos` del contrato específico
+    const updateResult = await pool.query(
+      "UPDATE contratos SET datos = $1 WHERE id = $2 RETURNING *",
+      [JSON.stringify(datos), id]
+    );
+
+    const result = await pool.query(
+      "UPDATE contratos SET estado = $1 WHERE id = $2 RETURNING *",
+      [estado, id]
+    );
+
+    // Verificar si se encontró y actualizó el contrato
+    if (updateResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "El contrato especificado no existe." });
+    }
+
+    const todosLosContratos = await pool.query(
+      "SELECT * FROM contratos WHERE sector = $1 AND usuario = $2",
+      [sector, username]
+    );
+
+    res.status(200).json({
+      contratoActualizado: updateResult.rows[0],
+      todosLosContratos: todosLosContratos.rows,
+    });
+  } catch (error) {
+    console.error("Error al actualizar datos del contrato:", error);
+    return res.status(500).json({ error: "Error interno del servidor." });
+  }
+};

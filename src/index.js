@@ -28,6 +28,13 @@ io.on("connection", (socket) => {
   socket.on("guardar-contrato-garantias", (guardarContrato) => {
     io.emit("guardar-contrato-garantias", guardarContrato);
   });
+
+  socket.on("guardar-contrato-garantias-con-platea", (guardarContrato) => {
+    io.emit("guardar-contrato-garantias-con-platea", guardarContrato);
+  });
+  socket.on("guardar-contrato-garantias-sin-platea", (guardarContrato) => {
+    io.emit("guardar-contrato-garantias-sin-platea", guardarContrato);
+  });
 });
 
 httpServer.listen(PORT, () => {

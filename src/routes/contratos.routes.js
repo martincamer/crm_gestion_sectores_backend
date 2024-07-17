@@ -8,6 +8,8 @@ import {
   getContratoById,
   getContratos,
   actualizarDatosContrato,
+  actualizarDatosContratoConPlatea,
+  actualizarDatosContratoSinPlatea,
 } from "../controllers/contratos.controllers.js";
 
 const router = Router();
@@ -28,5 +30,19 @@ router.put("/contratos/:id", isAuth, isAdmin, actualizarContrato);
 router.delete("/contratos/:id", isAuth, isAdmin, eliminarContrato);
 
 router.put("/contratos/:id/datos", isAuth, isAdmin, actualizarDatosContrato); // Nueva ruta para actualizar solo los datos de un contrato
+
+router.put(
+  "/contratos-con-plateas/:id/datos",
+  isAuth,
+  isAdmin,
+  actualizarDatosContratoConPlatea
+); // Nueva ruta para actualizar solo los datos de un contrato
+
+router.put(
+  "/contratos-sin-plateas/:id/datos",
+  isAuth,
+  isAdmin,
+  actualizarDatosContratoSinPlatea
+); // Nueva ruta para actualizar solo los datos de un contrato
 
 export default router;
