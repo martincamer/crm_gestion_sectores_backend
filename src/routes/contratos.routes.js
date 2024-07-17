@@ -10,6 +10,7 @@ import {
   actualizarDatosContrato,
   actualizarDatosContratoConPlatea,
   actualizarDatosContratoSinPlatea,
+  actualizarDatosContratoInformes,
 } from "../controllers/contratos.controllers.js";
 
 const router = Router();
@@ -43,6 +44,13 @@ router.put(
   isAuth,
   isAdmin,
   actualizarDatosContratoSinPlatea
+); // Nueva ruta para actualizar solo los datos de un contrato
+
+router.put(
+  "/contratos-a-informes/:id/datos",
+  isAuth,
+  isAdmin,
+  actualizarDatosContratoInformes
 ); // Nueva ruta para actualizar solo los datos de un contrato
 
 export default router;

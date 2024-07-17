@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.routes.js";
 import contratosRoutes from "./routes/contratos.routes.js";
+import sucursalRoutes from "./routes/sucursal.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -33,6 +34,7 @@ app.get("/api/ping", async (req, res) => {
 });
 app.use("/api", authRoutes);
 app.use("/api", contratosRoutes);
+app.use("/api", sucursalRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

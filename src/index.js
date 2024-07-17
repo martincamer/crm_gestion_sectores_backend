@@ -21,19 +21,8 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  socket.on("crear-contrato", (guardarContrato) => {
-    io.emit("crear-contrato", guardarContrato);
-  });
-
-  socket.on("guardar-contrato-garantias", (guardarContrato) => {
-    io.emit("guardar-contrato-garantias", guardarContrato);
-  });
-
-  socket.on("guardar-contrato-garantias-con-platea", (guardarContrato) => {
-    io.emit("guardar-contrato-garantias-con-platea", guardarContrato);
-  });
-  socket.on("guardar-contrato-garantias-sin-platea", (guardarContrato) => {
-    io.emit("guardar-contrato-garantias-sin-platea", guardarContrato);
+  socket.on("crear-sucursal", (guardarSucursal) => {
+    io.emit("crear-sucursal", guardarSucursal);
   });
 });
 
