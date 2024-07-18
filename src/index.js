@@ -24,6 +24,10 @@ io.on("connection", (socket) => {
   socket.on("crear-sucursal", (guardarSucursal) => {
     io.emit("crear-sucursal", guardarSucursal);
   });
+
+  socket.on("nuevo-comprobante", (nuevoComprobante) => {
+    io.emit("nuevo-comprobante", nuevoComprobante);
+  });
 });
 
 httpServer.listen(PORT, () => {
