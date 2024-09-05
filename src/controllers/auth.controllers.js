@@ -30,6 +30,7 @@ export const signin = async (req, res) => {
     localidad: result.rows[0].localidad,
     provincia: result.rows[0].provincia,
     sucursal: result.rows[0].sucursal,
+    username: result.rows[0].username,
   });
 
   res.cookie("token", token, {
@@ -71,6 +72,7 @@ export const signup = async (req, res, next) => {
       provincia: result.rows[0].provincia,
       sucursal: result.rows[0].sucursal,
       role: result.rows[0].role_id,
+      username: result.rows[0].username,
     });
 
     res.cookie("token", token, {
