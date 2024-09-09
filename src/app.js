@@ -6,6 +6,7 @@ import sucursalRoutes from "./routes/sucursal.routes.js";
 import proveedoresRoutes from "./routes/proveedores.routes.js";
 import cargasRoutes from "./routes/cargas.routes.js";
 import garitasRoutes from "./routes/garitas.routes.js";
+import informesRoutes from "./routes/informes.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -41,6 +42,7 @@ app.use("/api", sucursalRoutes);
 app.use("/api", proveedoresRoutes);
 app.use("/api", cargasRoutes);
 app.use("/api", garitasRoutes);
+app.use("/api", informesRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
