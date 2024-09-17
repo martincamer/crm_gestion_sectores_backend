@@ -53,7 +53,7 @@ export const getCargaById = async (req, res) => {
 };
 
 export const crearCarga = async (req, res) => {
-  const { nombre_apellido, numero_remito, datos } = req.body;
+  const { nombre_apellido, numero_remito, datos, destino } = req.body;
 
   const { username, userRole, localidad, provincia, sector } = req;
 
@@ -63,11 +63,12 @@ export const crearCarga = async (req, res) => {
 
     // Insert the new carga into the database
     const insertResult = await pool.query(
-      "INSERT INTO cargas (nombre_apellido, numero_remito, datos, localidad, usuario, role_id, sector, provincia) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      "INSERT INTO cargas (nombre_apellido, numero_remito, datos, destino, localidad, usuario, role_id, sector, provincia) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
       [
         nombre_apellido,
         numero_remito,
         datosString,
+        destino,
         localidad,
         username,
         userRole,
