@@ -96,30 +96,44 @@ export const crearCarga = async (req, res) => {
 
 export const actualizarCarga = async (req, res) => {
   const { id } = req.params;
-  const {
-    nombre_apellido,
-    localidad_carga,
-    provincia_carga,
-    numero_carga,
-    tipo_plan,
-    cuotas_anticipo,
-  } = req.body;
-  const { username, userRole, sector } = req;
+  const { nombre_apellido, numero_remito, datos, destino, localidad } =
+    req.body;
+  const { username, sector } = req;
+
+  // Solo actualizar 'datos' si ha sido proporcionado, sino mantener el valor actual
+  let datosString = null;
+  if (datos) {
+    datosString = JSON.stringify(datos);
+  }
 
   try {
-    const result = await pool.query(
-      "UPDATE cargas SET nombre_apellido = $1, localidad_carga = $2, provincia_carga = $3, numero_carga = $4, tipo_plan = $5, cuotas_anticipo = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 AND usuario = $8 RETURNING *",
-      [
-        nombre_apellido,
-        localidad_carga,
-        provincia_carga,
-        numero_carga,
-        tipo_plan,
-        cuotas_anticipo,
-        id,
-        username,
-      ]
-    );
+    // Construimos dinámicamente la consulta de actualización para que solo incluya campos que realmente han cambiado
+    let updateQuery = `
+      UPDATE cargas
+      SET nombre_apellido = $1,
+          numero_remito = $2,
+          destino = $3,
+          localidad = $4,
+          updated_at = CURRENT_TIMESTAMP
+    `;
+    const queryParams = [
+      nombre_apellido,
+      numero_remito,
+      destino,
+      localidad,
+      id,
+      username,
+    ];
+
+    if (datosString) {
+      updateQuery += `, datos = $5`;
+      queryParams.splice(4, 0, datosString); // Insertar datosString en la posición correcta
+    }
+
+    updateQuery += ` WHERE id = $6 AND usuario = $7 RETURNING *`;
+
+    // Ejecutamos la consulta de actualización
+    const result = await pool.query(updateQuery, queryParams);
 
     if (result.rowCount === 0) {
       return res.status(404).json({
@@ -128,11 +142,13 @@ export const actualizarCarga = async (req, res) => {
       });
     }
 
+    // Recuperamos todas las cargas del sector para el usuario
     const todasLasCargas = await pool.query(
       "SELECT * FROM cargas WHERE sector = $1 AND usuario = $2",
       [sector, username]
     );
 
+    // Respondemos con la carga actualizada y todas las cargas del usuario
     res.status(200).json({
       cargaActualizada: result.rows[0],
       todasLasCargas: todasLasCargas.rows,
